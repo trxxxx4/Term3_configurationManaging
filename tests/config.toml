@@ -1,0 +1,2 @@
+vfs_path = "tests/vfs_dummy.xml"
+script_path = "tests/script_success.txt"

@@ -1,7 +1,9 @@
 import getpass
 import socket
 import shlex
-
+import argparse
+import sys
+import tomllib
 
 def get_prompt():
     username = getpass.getuser()
@@ -18,10 +20,9 @@ def parse_input(user_input):
 def main():
     while True:
         try:
-            # 1. Read
+            
             user_input = input(get_prompt())
             
-            # 2. Eval / Parse
             if not user_input.strip():
                 continue
                 
@@ -32,7 +33,7 @@ def main():
             cmd = tokens[0]
             args = tokens[1:]
             
-            # 3. Print / Execute
+
             if cmd == "exit":
                 break
             elif cmd in ("ls", "cd"):
@@ -44,5 +45,6 @@ def main():
             print("\nexit")
             break
 
-if __name__ == "__main__": #защита от запуска при импорте модуля с файла
+if __name__ == "__main__":
     main()
+
