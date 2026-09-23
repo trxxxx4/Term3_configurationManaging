@@ -1,7 +1,7 @@
 import getpass
 import socket
 import shlex
-import sys
+
 
 def get_prompt():
     username = getpass.getuser()
@@ -36,7 +36,7 @@ def main():
             if cmd == "exit":
                 break
             elif cmd in ("ls", "cd"):
-                print(f"Executing command '{cmd}' with args: {args.split}")
+                print(f"Executing command '{cmd}' with args: {args}")
             else:
                 print(f"shell: command not found: {cmd}")
 
