@@ -1,9 +1,7 @@
 import getpass
 import socket
 import shlex
-import argparse
-import sys
-import tomllib
+
 
 def get_prompt():
     username = getpass.getuser()
