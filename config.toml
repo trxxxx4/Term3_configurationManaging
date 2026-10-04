@@ -1,0 +1,2 @@
+vfs_path = "vfs"
+startup_script = "tests/startup.txt"
