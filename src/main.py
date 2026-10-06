@@ -4,11 +4,20 @@ import shlex
 import socket
 import tomllib
 
+from vfs import VFS
 
-def get_prompt():
+
+def get_prompt(vfs):
     username = getpass.getuser()
     hostname = socket.gethostname()
-    return f"{username}@{hostname}:~$ "
+    path = vfs.get_path()
+
+    if path == "/":
+        path = "~"
+    else:
+        path = "~" + path
+
+    return f"{username}@{hostname}:{path}$ "
 
 
 def parse_input(user_input):
@@ -92,21 +101,52 @@ def print_settings(vfs_path, startup_script, config_path):
     print()
 
 
-def execute_command(command, args):
+def execute_command(command, args, vfs):
     if command == "exit":
         return True, True
 
-    if command in ("ls", "cd"):
-        print(
-            f"Executing command '{command}' with args: {args}"
-        )
+    if command == "ls":
+        if len(args) > 1:
+            print("shell: ls: too many arguments")
+            return False, False
+
+        path = args[0] if args else None
+
+        try:
+            entries = vfs.list_directory(path)
+
+            for entry in entries:
+                print(entry.name)
+
+        except ValueError as error:
+            print(f"shell: ls: {error}")
+            return False, False
+
+        return True, False
+
+    if command == "cd":
+        if len(args) > 1:
+            print("shell: cd: too many arguments")
+            return False, False
+
+        path = args[0] if args else "~"
+
+        if path == "~":
+            path = "/"
+
+        try:
+            vfs.change_directory(path)
+        except ValueError as error:
+            print(f"shell: cd: {error}")
+            return False, False
+
         return True, False
 
     print(f"shell: command not found: {command}")
     return False, False
 
 
-def execute_line(user_input):
+def execute_line(user_input, vfs):
     tokens = parse_input(user_input)
 
     if tokens is None:
@@ -115,24 +155,37 @@ def execute_line(user_input):
     if not tokens:
         return True, False
 
-    return execute_command(tokens[0], tokens[1:])
+    return execute_command(
+        tokens[0],
+        tokens[1:],
+        vfs
+    )
 
 
-def run_startup_script(script_path):
+def run_startup_script(script_path, vfs):
     try:
-        with open(script_path, "r", encoding="utf-8") as script:
+        with open(
+            script_path,
+            "r",
+            encoding="utf-8"
+        ) as script:
             for line in script:
                 command = line.strip()
 
                 if not command:
                     continue
 
-                print(f"{get_prompt()}{command}")
+                print(f"{get_prompt(vfs)}{command}")
 
-                success, should_exit = execute_line(command)
+                success, should_exit = execute_line(
+                    command,
+                    vfs
+                )
 
                 if not success:
-                    print("shell: startup script execution failed")
+                    print(
+                        "shell: startup script execution failed"
+                    )
                     return False, False
 
                 if should_exit:
@@ -145,15 +198,18 @@ def run_startup_script(script_path):
     return True, False
 
 
-def run_repl():
+def run_repl(vfs):
     while True:
         try:
-            user_input = input(get_prompt())
+            user_input = input(get_prompt(vfs))
 
             if not user_input.strip():
                 continue
 
-            success, should_exit = execute_line(user_input)
+            success, should_exit = execute_line(
+                user_input,
+                vfs
+            )
 
             if should_exit:
                 break
@@ -184,8 +240,15 @@ def main():
         arguments.config
     )
 
+    try:
+        vfs = VFS.from_xml(vfs_path)
+    except ValueError as error:
+        print(f"shell: VFS error: {error}")
+        return 1
+
     startup_success, should_exit = run_startup_script(
-        startup_script
+        startup_script,
+        vfs
     )
 
     if not startup_success:
@@ -194,7 +257,7 @@ def main():
     if should_exit:
         return 0
 
-    run_repl()
+    run_repl(vfs)
 
     return 0
 

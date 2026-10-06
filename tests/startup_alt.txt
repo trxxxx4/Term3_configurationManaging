@@ -1,3 +1,0 @@
-ls "another directory"
-cd "test directory"
-exit

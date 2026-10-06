@@ -1,4 +1,0 @@
-ls
-unknown_command
-cd test
-exit

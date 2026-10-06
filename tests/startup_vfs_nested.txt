@@ -1,0 +1,12 @@
+ls
+cd home
+ls
+cd user
+ls
+cd documents
+ls
+cd ..
+cd ..
+cd ..
+ls
+exit
