@@ -101,46 +101,54 @@ def print_settings(vfs_path, startup_script, config_path):
     print()
 
 
+def execute_ls(args, vfs):
+    if len(args) > 1:
+        print("shell: ls: too many arguments")
+        return False, False
+
+    path = args[0] if args else None
+
+    try:
+        entries = vfs.list_directory(path)
+
+        for entry in entries:
+            print(entry.name)
+
+    except ValueError as error:
+        print(f"shell: ls: {error}")
+        return False, False
+
+    return True, False
+
+
+def execute_cd(args, vfs):
+    if len(args) > 1:
+        print("shell: cd: too many arguments")
+        return False, False
+
+    path = args[0] if args else "~"
+
+    if path == "~":
+        path = "/"
+
+    try:
+        vfs.change_directory(path)
+    except ValueError as error:
+        print(f"shell: cd: {error}")
+        return False, False
+
+    return True, False
+
+
 def execute_command(command, args, vfs):
     if command == "exit":
         return True, True
 
     if command == "ls":
-        if len(args) > 1:
-            print("shell: ls: too many arguments")
-            return False, False
-
-        path = args[0] if args else None
-
-        try:
-            entries = vfs.list_directory(path)
-
-            for entry in entries:
-                print(entry.name)
-
-        except ValueError as error:
-            print(f"shell: ls: {error}")
-            return False, False
-
-        return True, False
+        return execute_ls(args, vfs)
 
     if command == "cd":
-        if len(args) > 1:
-            print("shell: cd: too many arguments")
-            return False, False
-
-        path = args[0] if args else "~"
-
-        if path == "~":
-            path = "/"
-
-        try:
-            vfs.change_directory(path)
-        except ValueError as error:
-            print(f"shell: cd: {error}")
-            return False, False
-
-        return True, False
+        return execute_cd(args, vfs)
 
     print(f"shell: command not found: {command}")
     return False, False
@@ -219,33 +227,15 @@ def run_repl(vfs):
             break
 
 
-def main():
-    arguments = parse_arguments()
-
-    config = load_config(arguments.config)
-
-    if config is None:
-        return 1
-
-    settings = resolve_settings(arguments, config)
-
-    if settings is None:
-        return 1
-
-    vfs_path, startup_script = settings
-
-    print_settings(
-        vfs_path,
-        startup_script,
-        arguments.config
-    )
-
+def load_vfs(vfs_path):
     try:
-        vfs = VFS.from_xml(vfs_path)
+        return VFS.from_xml(vfs_path)
     except ValueError as error:
         print(f"shell: VFS error: {error}")
-        return 1
+        return None
 
+
+def run_application(startup_script, vfs):
     startup_success, should_exit = run_startup_script(
         startup_script,
         vfs
@@ -258,8 +248,32 @@ def main():
         return 0
 
     run_repl(vfs)
-
     return 0
+
+
+def main():
+    arguments = parse_arguments()
+
+    config = load_config(arguments.config)
+    if config is None:
+        return 1
+
+    settings = resolve_settings(arguments, config)
+    if settings is None:
+        return 1
+
+    vfs_path, startup_script = settings
+    print_settings(
+        vfs_path,
+        startup_script,
+        arguments.config
+    )
+
+    vfs = load_vfs(vfs_path)
+    if vfs is None:
+        return 1
+
+    return run_application(startup_script, vfs)
 
 
 if __name__ == "__main__":

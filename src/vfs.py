@@ -29,8 +29,16 @@ class VFS:
 
     @classmethod
     def from_xml(cls, path):
+        tree = cls._parse_xml(path)
+        root_element = cls._validate_root(tree)
+        root = VFSNode("", True)
+        cls._load_root_nodes(root_element, root)
+        return cls(root)
+
+    @staticmethod
+    def _parse_xml(path):
         try:
-            tree = ET.parse(path)
+            return ET.parse(path)
         except FileNotFoundError as error:
             raise ValueError(
                 f"VFS file not found: {path}"
@@ -44,6 +52,8 @@ class VFS:
                 f"cannot read VFS file: {error}"
             ) from error
 
+    @staticmethod
+    def _validate_root(tree):
         root_element = tree.getroot()
 
         if root_element.tag != "vfs":
@@ -51,8 +61,10 @@ class VFS:
                 "invalid VFS XML: root element must be 'vfs'"
             )
 
-        root = VFSNode("", True)
+        return root_element
 
+    @classmethod
+    def _load_root_nodes(cls, root_element, root):
         try:
             for element in root_element:
                 cls._load_node(element, root)
@@ -63,78 +75,90 @@ class VFS:
                 f"invalid VFS data: {error}"
             ) from error
 
-        return cls(root)
-
     @classmethod
     def _load_node(cls, element, parent):
         if element.tag == "directory":
-            name = cls._get_name(element)
-
-            if list(element):
-                for child in element:
-                    if child.tag not in ("directory", "file"):
-                        raise ValueError(
-                            f"invalid VFS element: {child.tag}"
-                        )
-
-            node = VFSNode(
-                name=name,
-                is_directory=True,
-                parent=parent
-            )
-
-            cls._check_duplicate(parent, name)
-            parent.add_child(node)
-
-            for child in element:
-                cls._load_node(child, node)
-
-            return node
+            return cls._load_directory(element, parent)
 
         if element.tag == "file":
-            name = cls._get_name(element)
-            encoding = element.get("encoding")
-
-            content = element.text or ""
-
-            if encoding == "base64":
-                try:
-                    content = base64.b64decode(
-                        "".join(content.split()),
-                        validate=True
-                    )
-                except binascii.Error as error:
-                    raise ValueError(
-                        f"invalid base64 data in file '{name}'"
-                    ) from error
-            elif encoding is not None:
-                raise ValueError(
-                    f"unsupported encoding '{encoding}' "
-                    f"for file '{name}'"
-                )
-            else:
-                content = content.encode("utf-8")
-
-            if list(element):
-                raise ValueError(
-                    f"file '{name}' cannot contain child elements"
-                )
-
-            node = VFSNode(
-                name=name,
-                is_directory=False,
-                parent=parent,
-                content=content
-            )
-
-            cls._check_duplicate(parent, name)
-            parent.add_child(node)
-
-            return node
+            return cls._load_file(element, parent)
 
         raise ValueError(
             f"invalid VFS element: {element.tag}"
         )
+
+    @classmethod
+    def _load_directory(cls, element, parent):
+        name = cls._get_name(element)
+        cls._validate_directory_children(element)
+
+        node = VFSNode(
+            name=name,
+            is_directory=True,
+            parent=parent
+        )
+
+        cls._check_duplicate(parent, name)
+        parent.add_child(node)
+
+        for child in element:
+            cls._load_node(child, node)
+
+        return node
+
+    @staticmethod
+    def _validate_directory_children(element):
+        for child in element:
+            if child.tag not in ("directory", "file"):
+                raise ValueError(
+                    f"invalid VFS element: {child.tag}"
+                )
+
+    @classmethod
+    def _load_file(cls, element, parent):
+        name = cls._get_name(element)
+        content = cls._decode_file_content(element, name)
+
+        if list(element):
+            raise ValueError(
+                f"file '{name}' cannot contain child elements"
+            )
+
+        node = VFSNode(
+            name=name,
+            is_directory=False,
+            parent=parent,
+            content=content
+        )
+
+        cls._check_duplicate(parent, name)
+        parent.add_child(node)
+
+        return node
+
+    @staticmethod
+    def _decode_file_content(element, name):
+        encoding = element.get("encoding")
+        content = element.text or ""
+
+        if encoding == "base64":
+            try:
+                return base64.b64decode(
+                    "".join(content.split()),
+                    validate=True
+                )
+            except binascii.Error as error:
+                raise ValueError(
+                    f"invalid base64 data in file '{name}'"
+                ) from error
+
+        if encoding is not None:
+            raise ValueError(
+                f"unsupported encoding '{encoding}' "
+                f"for file '{name}'"
+            )
+
+        return content.encode("utf-8")
 
     @staticmethod
     def _get_name(element):
