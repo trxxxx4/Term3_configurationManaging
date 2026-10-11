@@ -1,2 +1,2 @@
 @echo off
-python src\main.py --config config.toml
+python src\main.py --config config.toml

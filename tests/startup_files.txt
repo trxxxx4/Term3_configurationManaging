@@ -1,0 +1,13 @@
+ls
+ls -a
+ls -l
+ls -lh
+ls -hla
+ls -alh
+ls home
+ls -l home/user.txt
+tac readme.txt notes.txt
+tac empty.txt
+touch a.txt b.txt c.txt
+ls
+exit

@@ -1,0 +1,18 @@
+cd home/student
+ls
+find
+find /home -name "*.txt"
+find /home -type d
+find documents -name "r*"
+cd documents
+tac report.txt todo.txt
+touch notes.md
+touch ../downloads/new.txt
+touch -c missing.txt
+touch todo.txt
+ls -l
+cd /
+find . -name "*.md"
+find /home/student/downloads -type f
+ls -l /home/student/downloads
+exit

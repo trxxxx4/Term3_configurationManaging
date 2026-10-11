@@ -1,0 +1,8 @@
+help
+ls
+ls -l
+tac hello.txt
+touch new.txt
+ls -l
+tac new.txt
+exit

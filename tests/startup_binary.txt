@@ -1,0 +1,8 @@
+ls -l
+ls -lh
+ls -alh
+tac binary.bin
+touch binary.bin
+touch -c nothing.bin
+ls -l
+exit

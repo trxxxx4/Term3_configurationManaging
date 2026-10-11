@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vfs>
-    <file name="readme.txt" encoding="base64">VmlydHVhbCBmaWxlIHN5c3RlbQ==</file>
-    <file name="notes.txt" encoding="base64">U29tZSBub3Rlcw==</file>
-    <file name="data.txt" encoding="base64">RXhhbXBsZSBkYXRh</file>
+    <file name="readme.txt" encoding="base64">VmlydHVhbCBmaWxlIHN5c3RlbQpsaW5lIHR3bwpsaW5lIHRocmVlCg==</file>
+    <file name="notes.txt" encoding="base64">Rmlyc3Qgbm90ZQpTZWNvbmQgbm90ZQo=</file>
+    <file name="data.txt" encoding="base64">RXhhbXBsZSBkYXRhCg==</file>
+    <file name="empty.txt" encoding="base64"></file>
+    <file name=".hidden" encoding="base64">SGlkZGVuIGZpbGUK</file>
     <directory name="home">
-        <file name="user.txt" encoding="base64">VXNlciBmaWxl</file>
+        <file name="user.txt" encoding="base64">VXNlciBmaWxlCg==</file>
     </directory>
 </vfs>

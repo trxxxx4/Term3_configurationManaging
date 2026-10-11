@@ -1,0 +1,5 @@
+ls
+find -name "*.txt"
+tac missing.txt
+ls
+exit

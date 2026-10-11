@@ -1,11 +1,17 @@
+"""In-memory virtual file system loaded from an XML file."""
+
 import base64
 import binascii
+import posixpath
+import time
 import xml.etree.ElementTree as ET
 
 DIRECTORY_SIZE = 4096
 
 
 class VFSNode:
+    """A file or a directory of the virtual file system."""
+
     def __init__(
         self,
         name,
@@ -13,38 +19,53 @@ class VFSNode:
         parent=None,
         content=b"",
     ):
+        """Create a node; the modification time is the current time."""
         self.name = name
         self.is_directory = is_directory
         self.parent = parent
         self.content = content
         self.children = []
+        self.mtime = time.time()
 
     @property
     def size(self):
-        """Return file size in bytes (4096 for directories)."""
+        """Return the size of the node in bytes."""
         if self.is_directory:
             return DIRECTORY_SIZE
 
         return len(self.content)
 
     def add_child(self, child):
+        """Attach a child node."""
         self.children.append(child)
 
     def get_child(self, name):
+        """Return the child with the given name or None."""
         for child in self.children:
             if child.name == name:
                 return child
 
         return None
 
+    def sorted_children(self):
+        """Return children sorted by name."""
+        return sorted(
+            self.children,
+            key=lambda child: (child.name.lower(), child.name)
+        )
+
 
 class VFS:
+    """Virtual file system with a current working directory."""
+
     def __init__(self, root):
+        """Create a VFS with the given root node."""
         self.root = root
         self.current = root
 
     @classmethod
     def from_xml(cls, path):
+        """Build a VFS from an XML file."""
         try:
             tree = ET.parse(path)
         except FileNotFoundError as error:
@@ -81,6 +102,7 @@ class VFS:
 
     @classmethod
     def _load_node(cls, element, parent):
+        """Load a directory or a file element."""
         if element.tag == "directory":
             return cls._load_directory(element, parent)
 
@@ -93,6 +115,7 @@ class VFS:
 
     @classmethod
     def _load_directory(cls, element, parent):
+        """Load a directory element with its children."""
         name = cls._get_name(element)
         cls._validate_directory_children(element)
 
@@ -111,6 +134,7 @@ class VFS:
 
     @staticmethod
     def _validate_directory_children(element):
+        """Check the tags of directory children."""
         for child in element:
             if child.tag not in ("directory", "file"):
                 raise ValueError(
@@ -119,6 +143,7 @@ class VFS:
 
     @classmethod
     def _load_file(cls, element, parent):
+        """Load a file element."""
         name = cls._get_name(element)
 
         if list(element):
@@ -139,6 +164,7 @@ class VFS:
 
     @staticmethod
     def _decode_file_content(element, name):
+        """Decode plain or base64 file content."""
         encoding = element.get("encoding")
         content = element.text or ""
 
@@ -163,6 +189,7 @@ class VFS:
 
     @staticmethod
     def _get_name(element):
+        """Return a valid entry name of an element."""
         name = element.get("name")
 
         if not name:
@@ -179,12 +206,14 @@ class VFS:
 
     @staticmethod
     def _check_duplicate(parent, name):
+        """Reject two entries with the same name."""
         if parent.get_child(name) is not None:
             raise ValueError(
                 f"duplicate VFS entry: {name}"
             )
 
     def get_path(self, node=None):
+        """Return the absolute path of a node."""
         if node is None:
             node = self.current
 
@@ -201,6 +230,7 @@ class VFS:
         return "/" + "/".join(parts)
 
     def resolve_path(self, path):
+        """Return the node for a path or None if it is missing."""
         if path == "":
             return self.current
 
@@ -230,6 +260,7 @@ class VFS:
         return node
 
     def change_directory(self, path):
+        """Make a directory the current one."""
         node = self.resolve_path(path)
 
         if node is None:
@@ -244,32 +275,41 @@ class VFS:
 
         self.current = node
 
-    def list_directory(self, path=None):
-        if path is None:
-            node = self.current
-        else:
-            node = self.resolve_path(path)
-
-        if node is None:
-            raise ValueError(
-                f"path not found: {path}"
-            )
-
-        if not node.is_directory:
-            raise ValueError(
-                f"not a directory: {path}"
-            )
-
-        return node.children
-
-    def read_file(self, path):
-        """Return the bytes of a VFS file."""
-        node = self.resolve_path(path)
-
-        if node is None:
-            raise ValueError(f"file not found: {path}")
+    def walk(self, node):
+        """Yield (relative name parts, node) depth-first, node first."""
+        yield [], node
 
         if node.is_directory:
-            raise ValueError(f"is a directory: {path}")
+            for child in node.sorted_children():
+                for parts, found in self.walk(child):
+                    yield [child.name] + parts, found
 
-        return node.content
+    def touch(self, path, create=True):
+        """Update the mtime of an entry, creating a file if needed."""
+        node = self.resolve_path(path)
+
+        if node is not None:
+            node.mtime = time.time()
+            return
+
+        if create:
+            self._create_file(path)
+
+    def _create_file(self, path):
+        """Create an empty file in an existing directory."""
+        error = f"cannot touch '{path}'"
+
+        if path.endswith("/"):
+            raise ValueError(f"{error}: No such file or directory")
+
+        parent_path, name = posixpath.split(path)
+        parent = self.resolve_path(parent_path)
+
+        if parent is None:
+            raise ValueError(f"{error}: No such file or directory")
+
+        if not parent.is_directory:
+            raise ValueError(f"{error}: Not a directory")
+
+        parent.add_child(VFSNode(name, False, parent))
+        parent.mtime = time.time()

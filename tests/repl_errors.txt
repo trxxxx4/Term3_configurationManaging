@@ -1,0 +1,19 @@
+unknown
+ls -z
+ls /missing
+ls home /extra
+cd welcome.txt
+cd /missing
+find /missing
+find -bogus x
+find -name
+find -type x
+tac
+tac home
+tac nofile.txt
+touch
+touch /missing/file.txt
+touch welcome.txt/child
+touch -z file
+help extra
+exit
