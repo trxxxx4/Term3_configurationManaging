@@ -1,0 +1,31 @@
+ls
+ls -a
+ls -l
+ls -h
+ls -lh
+ls -la
+ls -hla
+ls -alh
+ls -l -a -h
+ls -l home/student
+ls -lah /home/student
+ls welcome.txt
+ls -l big.txt
+ls -lh big.txt
+cd home/student
+ls -a
+ls -l documents
+cd ..
+cd /home/student/documents
+ls
+cd ../..
+cd
+find
+find home -type d
+find / -type f
+find /home -name "*.txt"
+find home/student -name ".*" -type f
+find . -type d -name "d*"
+tac lines.txt
+tac "home/student/documents/todo.txt" lines.txt
+exit

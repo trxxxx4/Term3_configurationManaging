@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vfs>
+    <file name="welcome.txt" encoding="base64">TmVzdGVkIFZGUyBleGFtcGxlLgo=</file>
+    <file name=".hidden" encoding="base64">SGlkZGVuIGZpbGUuCg==</file>
+    <file name="lines.txt" encoding="base64">Zmlyc3QKc2Vjb25kCnRoaXJkCg==</file>
+    <file name="big.txt" encoding="base64">
+        bGluZSAwMDEKbGluZSAwMDIKbGluZSAwMDMKbGluZSAwMDQKbGluZSAwMDUKbGluZSAwMDYKbGlu
+        ZSAwMDcKbGluZSAwMDgKbGluZSAwMDkKbGluZSAwMTAKbGluZSAwMTEKbGluZSAwMTIKbGluZSAw
+        MTMKbGluZSAwMTQKbGluZSAwMTUKbGluZSAwMTYKbGluZSAwMTcKbGluZSAwMTgKbGluZSAwMTkK
+        bGluZSAwMjAKbGluZSAwMjEKbGluZSAwMjIKbGluZSAwMjMKbGluZSAwMjQKbGluZSAwMjUKbGlu
+        ZSAwMjYKbGluZSAwMjcKbGluZSAwMjgKbGluZSAwMjkKbGluZSAwMzAKbGluZSAwMzEKbGluZSAw
+        MzIKbGluZSAwMzMKbGluZSAwMzQKbGluZSAwMzUKbGluZSAwMzYKbGluZSAwMzcKbGluZSAwMzgK
+        bGluZSAwMzkKbGluZSAwNDAKbGluZSAwNDEKbGluZSAwNDIKbGluZSAwNDMKbGluZSAwNDQKbGlu
+        ZSAwNDUKbGluZSAwNDYKbGluZSAwNDcKbGluZSAwNDgKbGluZSAwNDkKbGluZSAwNTAKbGluZSAw
+        NTEKbGluZSAwNTIKbGluZSAwNTMKbGluZSAwNTQKbGluZSAwNTUKbGluZSAwNTYKbGluZSAwNTcK
+        bGluZSAwNTgKbGluZSAwNTkKbGluZSAwNjAKbGluZSAwNjEKbGluZSAwNjIKbGluZSAwNjMKbGlu
+        ZSAwNjQKbGluZSAwNjUKbGluZSAwNjYKbGluZSAwNjcKbGluZSAwNjgKbGluZSAwNjkKbGluZSAw
+        NzAKbGluZSAwNzEKbGluZSAwNzIKbGluZSAwNzMKbGluZSAwNzQKbGluZSAwNzUKbGluZSAwNzYK
+        bGluZSAwNzcKbGluZSAwNzgKbGluZSAwNzkKbGluZSAwODAKbGluZSAwODEKbGluZSAwODIKbGlu
+        ZSAwODMKbGluZSAwODQKbGluZSAwODUKbGluZSAwODYKbGluZSAwODcKbGluZSAwODgKbGluZSAw
+        ODkKbGluZSAwOTAKbGluZSAwOTEKbGluZSAwOTIKbGluZSAwOTMKbGluZSAwOTQKbGluZSAwOTUK
+        bGluZSAwOTYKbGluZSAwOTcKbGluZSAwOTgKbGluZSAwOTkKbGluZSAxMDAKbGluZSAxMDEKbGlu
+        ZSAxMDIKbGluZSAxMDMKbGluZSAxMDQKbGluZSAxMDUKbGluZSAxMDYKbGluZSAxMDcKbGluZSAx
+        MDgKbGluZSAxMDkKbGluZSAxMTAKbGluZSAxMTEKbGluZSAxMTIKbGluZSAxMTMKbGluZSAxMTQK
+        bGluZSAxMTUKbGluZSAxMTYKbGluZSAxMTcKbGluZSAxMTgKbGluZSAxMTkKbGluZSAxMjAKbGlu
+        ZSAxMjEKbGluZSAxMjIKbGluZSAxMjMKbGluZSAxMjQKbGluZSAxMjUKbGluZSAxMjYKbGluZSAx
+        MjcKbGluZSAxMjgKbGluZSAxMjkKbGluZSAxMzAKbGluZSAxMzEKbGluZSAxMzIKbGluZSAxMzMK
+        bGluZSAxMzQKbGluZSAxMzUKbGluZSAxMzYKbGluZSAxMzcKbGluZSAxMzgKbGluZSAxMzkKbGlu
+        ZSAxNDAKbGluZSAxNDEKbGluZSAxNDIKbGluZSAxNDMKbGluZSAxNDQKbGluZSAxNDUKbGluZSAx
+        NDYKbGluZSAxNDcKbGluZSAxNDgKbGluZSAxNDkKbGluZSAxNTAKbGluZSAxNTEKbGluZSAxNTIK
+        bGluZSAxNTMKbGluZSAxNTQKbGluZSAxNTUKbGluZSAxNTYKbGluZSAxNTcKbGluZSAxNTgKbGlu
+        ZSAxNTkKbGluZSAxNjAKbGluZSAxNjEKbGluZSAxNjIKbGluZSAxNjMKbGluZSAxNjQKbGluZSAx
+        NjUKbGluZSAxNjYKbGluZSAxNjcKbGluZSAxNjgKbGluZSAxNjkKbGluZSAxNzAKbGluZSAxNzEK
+        bGluZSAxNzIKbGluZSAxNzMKbGluZSAxNzQKbGluZSAxNzUKbGluZSAxNzYKbGluZSAxNzcKbGlu
+        ZSAxNzgKbGluZSAxNzkKbGluZSAxODAKbGluZSAxODEKbGluZSAxODIKbGluZSAxODMKbGluZSAx
+        ODQKbGluZSAxODUKbGluZSAxODYKbGluZSAxODcKbGluZSAxODgKbGluZSAxODkKbGluZSAxOTAK
+        bGluZSAxOTEKbGluZSAxOTIKbGluZSAxOTMKbGluZSAxOTQKbGluZSAxOTUKbGluZSAxOTYKbGlu
+        ZSAxOTcKbGluZSAxOTgKbGluZSAxOTkKbGluZSAyMDAK
+    </file>
+    <directory name="home">
+        <directory name="student">
+            <file name=".bashrc" encoding="base64">IyBzdHVkZW50IGNvbmZpZwo=</file>
+            <directory name="documents">
+                <file name="report.txt" encoding="base64">VGhpcyBmaWxlIGlzIGluc2lkZSB0aHJlZSBkaXJlY3RvcnkgbGV2ZWxzLgo=</file>
+                <file name="todo.txt" encoding="base64">UmV2aWV3IHRoZSBWRlMgc3RhZ2UuCkltcGxlbWVudCBmaW5kIGFuZCB0YWMuCg==</file>
+            </directory>
+            <directory name="downloads">
+                <file name="data.txt" encoding="base64">RXhhbXBsZSBkb3dubG9hZGVkIGRhdGEuCg==</file>
+            </directory>
+            <directory name="empty"></directory>
+        </directory>
+    </directory>
+</vfs>
