@@ -1,2 +1,2 @@
 vfs_path = "tests/vfs_minimal.xml"
-startup_script = "tests/startup_vfs.txt"
+startup_script = "tests/startup_stage3.txt"
