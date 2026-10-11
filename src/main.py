@@ -32,23 +32,19 @@ def parse_arguments():
     parser = argparse.ArgumentParser(
         description="UNIX-like shell emulator"
     )
-
     parser.add_argument(
         "--vfs-path",
         help="path to the VFS"
     )
-
     parser.add_argument(
         "--startup-script",
         help="path to the startup script"
     )
-
     parser.add_argument(
         "--config",
         required=True,
         help="path to the TOML configuration file"
     )
-
     return parser.parse_args()
 
 
@@ -87,7 +83,6 @@ def resolve_settings(arguments, config):
             )
 
         return vfs_path, startup_script
-
     except ValueError as error:
         print(f"shell: config error: {error}")
         return None
@@ -101,60 +96,21 @@ def print_settings(vfs_path, startup_script, config_path):
     print()
 
 
-def execute_ls(args, vfs):
-    if len(args) > 1:
-        print("shell: ls: too many arguments")
-        return False, False
-
-    path = args[0] if args else None
-
-    try:
-        entries = vfs.list_directory(path)
-
-        for entry in entries:
-            print(entry.name)
-
-    except ValueError as error:
-        print(f"shell: ls: {error}")
-        return False, False
-
-    return True, False
-
-
-def execute_cd(args, vfs):
-    if len(args) > 1:
-        print("shell: cd: too many arguments")
-        return False, False
-
-    path = args[0] if args else "~"
-
-    if path == "~":
-        path = "/"
-
-    try:
-        vfs.change_directory(path)
-    except ValueError as error:
-        print(f"shell: cd: {error}")
-        return False, False
-
-    return True, False
-
-
-def execute_command(command, args, vfs):
+def execute_command(command, args):
     if command == "exit":
         return True, True
 
-    if command == "ls":
-        return execute_ls(args, vfs)
-
-    if command == "cd":
-        return execute_cd(args, vfs)
+    if command in ("ls", "cd"):
+        print(
+            f"Executing command '{command}' with args: {args}"
+        )
+        return True, False
 
     print(f"shell: command not found: {command}")
     return False, False
 
 
-def execute_line(user_input, vfs):
+def execute_line(user_input):
     tokens = parse_input(user_input)
 
     if tokens is None:
@@ -163,11 +119,7 @@ def execute_line(user_input, vfs):
     if not tokens:
         return True, False
 
-    return execute_command(
-        tokens[0],
-        tokens[1:],
-        vfs
-    )
+    return execute_command(tokens[0], tokens[1:])
 
 
 def run_startup_script(script_path, vfs):
@@ -184,11 +136,7 @@ def run_startup_script(script_path, vfs):
                     continue
 
                 print(f"{get_prompt(vfs)}{command}")
-
-                success, should_exit = execute_line(
-                    command,
-                    vfs
-                )
+                success, should_exit = execute_line(command)
 
                 if not success:
                     print(
@@ -198,7 +146,6 @@ def run_startup_script(script_path, vfs):
 
                 if should_exit:
                     return True, True
-
     except OSError as error:
         print(f"shell: startup script error: {error}")
         return False, False
@@ -214,14 +161,10 @@ def run_repl(vfs):
             if not user_input.strip():
                 continue
 
-            success, should_exit = execute_line(
-                user_input,
-                vfs
-            )
+            success, should_exit = execute_line(user_input)
 
             if should_exit:
                 break
-
         except KeyboardInterrupt:
             print("\nexit")
             break
@@ -253,8 +196,8 @@ def run_application(startup_script, vfs):
 
 def main():
     arguments = parse_arguments()
-
     config = load_config(arguments.config)
+
     if config is None:
         return 1
 

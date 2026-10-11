@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vfs>
-    <file name="hello.txt">Hello, VFS!</file>
+    <file name="welcome.txt" encoding="base64">V2VsY29tZSB0byB0aGUgbWluaW1hbCB2aXJ0dWFsIGZpbGUgc3lzdGVtLgo=</file>
 </vfs>

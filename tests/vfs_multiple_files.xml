@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vfs>
+    <file name="welcome.txt" encoding="base64">V2VsY29tZSB0byB0aGUgVkZTLgo=</file>
+    <file name="notes.txt" encoding="base64">VGhlc2UgYXJlIHNhbXBsZSBub3Rlcy4K</file>
+    <directory name="home">
+        <file name="user.txt" encoding="base64">U2FtcGxlIHVzZXIgZGF0YS4K</file>
+        <file name="readme.txt" encoding="base64">RmlsZXMgYXJlIHN0b3JlZCBpbiBtZW1vcnkuCg==</file>
+    </directory>
+</vfs>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<vfs>
-    <file name="readme.txt">Virtual file system</file>
-    <file name="notes.txt">Some notes</file>
-    <file name="data.txt">Example data</file>
-    <directory name="home">
-        <file name="user.txt">User file</file>
-    </directory>
-</vfs>

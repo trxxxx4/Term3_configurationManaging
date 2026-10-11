@@ -1,0 +1,5 @@
+ls
+ls "/home/student"
+cd
+cd "/home/student"
+ls "file with spaces.txt"

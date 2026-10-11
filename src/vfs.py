@@ -4,7 +4,13 @@ import xml.etree.ElementTree as ET
 
 
 class VFSNode:
-    def __init__(self, name, is_directory, parent=None, content=b""):
+    def __init__(
+        self,
+        name,
+        is_directory,
+        parent=None,
+        content=b"",
+    ):
         self.name = name
         self.is_directory = is_directory
         self.parent = parent
@@ -29,16 +35,8 @@ class VFS:
 
     @classmethod
     def from_xml(cls, path):
-        tree = cls._parse_xml(path)
-        root_element = cls._validate_root(tree)
-        root = VFSNode("", True)
-        cls._load_root_nodes(root_element, root)
-        return cls(root)
-
-    @staticmethod
-    def _parse_xml(path):
         try:
-            return ET.parse(path)
+            tree = ET.parse(path)
         except FileNotFoundError as error:
             raise ValueError(
                 f"VFS file not found: {path}"
@@ -52,8 +50,6 @@ class VFS:
                 f"cannot read VFS file: {error}"
             ) from error
 
-    @staticmethod
-    def _validate_root(tree):
         root_element = tree.getroot()
 
         if root_element.tag != "vfs":
@@ -61,19 +57,17 @@ class VFS:
                 "invalid VFS XML: root element must be 'vfs'"
             )
 
-        return root_element
+        root = VFSNode("", True)
 
-    @classmethod
-    def _load_root_nodes(cls, root_element, root):
         try:
             for element in root_element:
                 cls._load_node(element, root)
-        except ValueError:
-            raise
         except (binascii.Error, ValueError) as error:
             raise ValueError(
                 f"invalid VFS data: {error}"
             ) from error
+
+        return cls(root)
 
     @classmethod
     def _load_node(cls, element, parent):
@@ -97,7 +91,6 @@ class VFS:
             is_directory=True,
             parent=parent
         )
-
         cls._check_duplicate(parent, name)
         parent.add_child(node)
 
@@ -117,23 +110,21 @@ class VFS:
     @classmethod
     def _load_file(cls, element, parent):
         name = cls._get_name(element)
-        content = cls._decode_file_content(element, name)
 
         if list(element):
             raise ValueError(
                 f"file '{name}' cannot contain child elements"
             )
 
+        content = cls._decode_file_content(element, name)
         node = VFSNode(
             name=name,
             is_directory=False,
             parent=parent,
             content=content
         )
-
         cls._check_duplicate(parent, name)
         parent.add_child(node)
-
         return node
 
     @staticmethod

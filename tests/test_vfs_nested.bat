@@ -1,2 +1,2 @@
 @echo off
-python src\main.py --config config.toml --vfs-path tests\vfs_nested.xml --startup-script tests\startup_vfs_nested.txt
+python src\main.py --config config.toml --vfs-path tests\vfs_nested.xml --startup-script tests\startup_stage3.txt

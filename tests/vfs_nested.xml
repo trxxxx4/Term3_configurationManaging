@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vfs>
+    <file name="welcome.txt" encoding="base64">TmVzdGVkIFZGUyBleGFtcGxlLgo=</file>
     <directory name="home">
-        <directory name="user">
+        <directory name="student">
             <directory name="documents">
-                <file name="report.txt">Report data</file>
+                <file name="report.txt" encoding="base64">VGhpcyBmaWxlIGlzIGluc2lkZSB0aHJlZSBkaXJlY3RvcnkgbGV2ZWxzLgo=</file>
+                <file name="todo.txt" encoding="base64">UmV2aWV3IHRoZSBWRlMgc3RhZ2UuCg==</file>
+            </directory>
+            <directory name="downloads">
+                <file name="data.txt" encoding="base64">RXhhbXBsZSBkb3dubG9hZGVkIGRhdGEuCg==</file>
             </directory>
         </directory>
     </directory>
