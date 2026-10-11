@@ -4,6 +4,7 @@ import shlex
 import socket
 import tomllib
 
+from commands import execute_command
 from vfs import VFS
 
 
@@ -99,59 +100,6 @@ def print_settings(vfs_path, startup_script, config_path):
     print(f"Startup script: {startup_script}")
     print(f"Config file: {config_path}")
     print()
-
-
-def execute_ls(args, vfs):
-    if len(args) > 1:
-        print("shell: ls: too many arguments")
-        return False, False
-
-    path = args[0] if args else None
-
-    try:
-        entries = vfs.list_directory(path)
-
-        for entry in entries:
-            print(entry.name)
-
-    except ValueError as error:
-        print(f"shell: ls: {error}")
-        return False, False
-
-    return True, False
-
-
-def execute_cd(args, vfs):
-    if len(args) > 1:
-        print("shell: cd: too many arguments")
-        return False, False
-
-    path = args[0] if args else "~"
-
-    if path == "~":
-        path = "/"
-
-    try:
-        vfs.change_directory(path)
-    except ValueError as error:
-        print(f"shell: cd: {error}")
-        return False, False
-
-    return True, False
-
-
-def execute_command(command, args, vfs):
-    if command == "exit":
-        return True, True
-
-    if command == "ls":
-        return execute_ls(args, vfs)
-
-    if command == "cd":
-        return execute_cd(args, vfs)
-
-    print(f"shell: command not found: {command}")
-    return False, False
 
 
 def execute_line(user_input, vfs):

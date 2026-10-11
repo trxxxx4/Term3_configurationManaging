@@ -3,7 +3,7 @@
     <directory name="home">
         <directory name="user">
             <directory name="documents">
-                <file name="report.txt">Report data</file>
+                <file name="report.txt" encoding="base64">UmVwb3J0IGRhdGE=</file>
             </directory>
         </directory>
     </directory>
