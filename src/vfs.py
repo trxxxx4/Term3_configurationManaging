@@ -4,7 +4,7 @@ import base64
 import binascii
 import posixpath
 import time
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as et
 
 DIRECTORY_SIZE = 4096
 
@@ -67,12 +67,12 @@ class VFS:
     def from_xml(cls, path):
         """Build a VFS from an XML file."""
         try:
-            tree = ET.parse(path)
+            tree = et.parse(path)
         except FileNotFoundError as error:
             raise ValueError(
                 f"VFS file not found: {path}"
             ) from error
-        except ET.ParseError as error:
+        except et.ParseError as error:
             raise ValueError(
                 f"invalid VFS XML: {error}"
             ) from error
