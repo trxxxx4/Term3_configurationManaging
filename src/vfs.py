@@ -1,6 +1,6 @@
 import base64
 import binascii
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as et
 
 
 class VFSNode:
@@ -36,12 +36,12 @@ class VFS:
     @classmethod
     def from_xml(cls, path):
         try:
-            tree = ET.parse(path)
+            tree = et.parse(path)
         except FileNotFoundError as error:
             raise ValueError(
                 f"VFS file not found: {path}"
             ) from error
-        except ET.ParseError as error:
+        except et.ParseError as error:
             raise ValueError(
                 f"invalid VFS XML: {error}"
             ) from error
